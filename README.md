@@ -1,3 +1,11 @@
+# docker-electrumx-omni
+docker-build.sh - to build the image
+docker-run.sh - to start the server 
+
+Attention: docker-run maps host path "/opt/electrumx-omni" into image "/data" volume. Server key & cert shall be copied there manually
+
+
+
 
 # docker-electrumx
 

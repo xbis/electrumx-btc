@@ -1,31 +1,34 @@
 FROM python:3.6-alpine3.6
-LABEL maintainer="Luke Childs <lukechilds123@gmail.com>"
 
 COPY ./bin /usr/local/bin
-COPY ./VERSION /tmp
+COPY ./ electrumx/
+COPY electrumx.conf /etc/electrumx.conf
 
-RUN VERSION=$(cat /tmp/VERSION) && \
-    chmod a+x /usr/local/bin/* && \
-    apk add --no-cache git build-base openssl && \
+RUN chmod a+x /usr/local/bin/* && \
+    apk add --no-cache build-base openssl && \
     apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing leveldb-dev && \
-    pip install aiohttp pylru plyvel && \
-    git clone -b $VERSION https://github.com/kyuupichan/electrumx.git && \
+    pip3 install aiohttp pylru plyvel && \
     cd electrumx && \
-    python setup.py install && \
-    apk del git build-base && \
+    python3 setup.py install && \
+    apk del build-base && \
     rm -rf /tmp/*
 
 VOLUME ["/data"]
 ENV HOME /data
 ENV ALLOW_ROOT 1
-ENV DB_DIRECTORY /data
-ENV TCP_PORT=50001
-ENV SSL_PORT=50002
-ENV SSL_CERTFILE ${DB_DIRECTORY}/electrumx.crt
+ENV DB_DIRECTORY /data 
+ENV COIN=BitcoinSegwit
+ENV NET=regtest
+ENV PEER_DISCOVERY=
+ENV HOST= 
+ENV TCP_PORT=19500
+ENV RPC_HOST= 
+ENV RPC_PORT=19501
+ENV SSL_PORT=19502 
+ENV SSL_CERTFILE ${DB_DIRECTORY}/electrumx.crt 
 ENV SSL_KEYFILE ${DB_DIRECTORY}/electrumx.key
-ENV HOST ""
 WORKDIR /data
 
-EXPOSE 50001 50002
+EXPOSE 19502
 
 CMD ["init"]
