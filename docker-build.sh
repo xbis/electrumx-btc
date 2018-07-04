@@ -1,1 +1,1 @@
-sudo docker build -t attic:electrumx-omni .
+docker build -t attic:electrumx-btc .
